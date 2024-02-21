@@ -1,23 +1,39 @@
-import logo from './logo.svg';
 import './App.css';
+import NavMenu from './components/NavMenu';
+import { Routes, Route } from 'react-router-dom'
+import TeamsPage from './pages/TeamsPage'
+import ConfigurationPage from './pages/ConfigurationPage'
+import MainPage from './pages/MainPage'
+import { useState } from 'react';
+import { Context } from './context'; 
 
 function App() {
+
+  const delete_card = (id) =>{
+      setUsers(users.filter(el=>el.id!==id))
+  }
+
+  const [teams, setTeams] = useState([])
+
+  const [users, setUsers] = useState([])
+
+  const add_team =(team_massiv) =>{
+    setTeams([...teams, team_massiv])
+  }
+
+  const add_user = (user_massiv) => {
+    setUsers([...users, user_massiv])
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Context.Provider value={{users,add_team, add_user, teams, delete_card}}>
+      <NavMenu/>
+      <Routes>
+        <Route path='/' element={<MainPage/>}/>
+        <Route path='/configuration' element={ <ConfigurationPage/> }/>
+        <Route path='/teams' element={<TeamsPage/>}/>
+      </Routes>
+      </Context.Provider>
     </div>
   );
 }
